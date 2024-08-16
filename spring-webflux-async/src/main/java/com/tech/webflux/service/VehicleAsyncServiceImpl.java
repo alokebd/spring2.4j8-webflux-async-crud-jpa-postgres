@@ -4,15 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-
 import com.tech.webflux.db.domain.Vehicle;
 import com.tech.webflux.db.repository.VehicleRepository;
 import com.tech.webflux.dto.VehicleDto;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -21,16 +19,14 @@ public class VehicleAsyncServiceImpl implements VehicleAsyncService{
 	
 	@Autowired
 	private VehicleRepository vehicleRepo;
+	
+	@Autowired
+    private ModelMapper modelMapper;
 
 	@Override
 	public Mono<VehicleDto> createVehicleAsync(VehicleDto vehicleDto) {
 		CompletableFuture<VehicleDto> future = CompletableFuture.supplyAsync(() -> {
-			Vehicle vehicleDomain = new Vehicle()
-								.setModel(vehicleDto.getModel())
-								.setMake(vehicleDto.getMake())
-								.setColor(vehicleDto.getColor())
-								.setVin(vehicleDto.getVin())
-								.setYear(vehicleDto.getYear());
+			Vehicle vehicleDomain = modelMapper.map(vehicleDto, Vehicle.class);
 			vehicleDomain = vehicleRepo.save(vehicleDomain);
 			vehicleDto.setId(vehicleDomain.getId());
 			return vehicleDto;
@@ -48,12 +44,7 @@ public class VehicleAsyncServiceImpl implements VehicleAsyncService{
 			VehicleDto dto = null;
 			if (vehicleOptional.isPresent()) {
 				Vehicle v = vehicleOptional.get();
-				dto = new VehicleDto().setColor(v.getColor())
-						.setId(v.getId())
-						.setMake(v.getMake())
-						.setModel(v.getModel())
-						.setVin(v.getVin())
-						.setYear(v.getYear());
+				dto = modelMapper.map(v, VehicleDto.class);
 			}
 			return dto;
 		});
@@ -68,12 +59,7 @@ public class VehicleAsyncServiceImpl implements VehicleAsyncService{
 			CompletableFuture<List<VehicleDto>> future = CompletableFuture.supplyAsync( () -> {
 				List<Vehicle> vehicleList = vehicleRepo.findAll(PageRequest.of(0, 1000)).getContent();
 				List<VehicleDto> vehicleDtoList = vehicleList.parallelStream().map( (vehicle) -> {
-					return new VehicleDto().setColor(vehicle.getColor())
-							.setId(vehicle.getId())
-							.setMake(vehicle.getMake())
-							.setModel(vehicle.getModel())
-							.setVin(vehicle.getVin())
-							.setYear(vehicle.getYear());
+					return modelMapper.map(vehicle, VehicleDto.class);
 				}).collect(Collectors.toList());
 				return vehicleDtoList;
 			});
@@ -91,13 +77,7 @@ public class VehicleAsyncServiceImpl implements VehicleAsyncService{
 	@Override
 	public Mono<Void> updateVehicleAsync(VehicleDto vehicleDto) {
 		CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-			Vehicle vehicleDomain = new Vehicle()
-					.setModel(vehicleDto.getModel())
-					.setMake(vehicleDto.getMake())
-					.setColor(vehicleDto.getColor())
-					.setVin(vehicleDto.getVin())
-					.setYear(vehicleDto.getYear())
-					.setId(vehicleDto.getId());
+			Vehicle vehicleDomain = modelMapper.map(vehicleDto, Vehicle.class);
 			vehicleDomain = vehicleRepo.save(vehicleDomain);
 		});
 		Mono<Void> monoFromFuture = Mono.fromFuture(future);

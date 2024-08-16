@@ -2,6 +2,7 @@ package com.tech.webflux.controller;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +37,14 @@ public class VehicleController {
 
 	@Autowired
     private VehicleService vehicleService;
+	
+	@Autowired
+    private ModelMapper modelMapper;
     
     @PostMapping
     public ResponseEntity<Object> createVehicle(@RequestBody VehicleRequest req) {
         try {
-            VehicleDto vehicleDto = new VehicleDto()
-                    .setColor(req.getColor())
-                    .setMake(req.getMake())
-                    .setModel(req.getModel())
-                    .setVin(req.getVin())
-                    .setYear(req.getYear());
+            VehicleDto vehicleDto = modelMapper.map(req, VehicleDto.class);
             ServiceResponseDto<VehicleDto> response = vehicleService.createVehicle(vehicleDto);
 
             switch (response.getStatus()) {
@@ -70,10 +69,8 @@ public class VehicleController {
 	        case SUCCESS:
 	            return new ResponseEntity<VehicleDto>(response.getResponseObject(), HttpStatus.OK);
 	        case NOT_FOUND:
-	            //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	        	throw new VehicleNotFoundException(ApplicationProperties.ERROR_VECHICLE_NOT_FOUND+ id);
 	        default:
-	           // return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	            throw new InternalServerError(ApplicationProperties._500_ERROR);
     	}
     }
@@ -94,13 +91,7 @@ public class VehicleController {
     @PutMapping
     public ResponseEntity<Object> updateVehicle(@RequestBody VehicleRequest req) {
         try {
-            VehicleDto vehicleDto = new VehicleDto()
-                    .setColor(req.getColor())
-                    .setMake(req.getMake())
-                    .setModel(req.getModel())
-                    .setVin(req.getVin())
-                    .setYear(req.getYear())
-                    .setId(req.getId());
+            VehicleDto vehicleDto = modelMapper.map(req, VehicleDto.class);
             ServiceResponseDto<VehicleDto> response = vehicleService.updateVehicle(vehicleDto);
 
             switch (response.getStatus()) {

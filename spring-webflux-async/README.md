@@ -11,7 +11,7 @@
 - Application Framework: Spring Boot (2.4.4)
 - Language: Java (8)
 - Packaging: Jar
-- Dependencies (Spring Web, Lombok, Spring Data JPA, Spring Devtools, Spring Test, junit, Springfox(Swagger2), WebFlux, PostGreSQL.
+- Dependencies (Spring Web, Lombok, Spring Data JPA, Spring Devtools, Spring Test, junit, Springfox(Swagger2), WebFlux, ModdleMapper, PostGreSQL.
 - Change application.properties for DB connection attributes (db name, user and password) when required.
 
 ## Local setup
@@ -40,4 +40,4 @@
 - The synchronous CRDD APIs: `v1/vehicle`
 
 ## Postman Collection
-- Postman collection added for testing.
+- Postman collection added for testing `spring-webflux-async/Spring Webflux-Async Communicaiton.postman_collection.json`

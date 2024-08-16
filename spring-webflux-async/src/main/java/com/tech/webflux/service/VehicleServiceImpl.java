@@ -3,11 +3,10 @@ package com.tech.webflux.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-
 import com.tech.webflux.db.domain.Vehicle;
 import com.tech.webflux.db.repository.VehicleRepository;
 import com.tech.webflux.dto.ServiceResponseDto;
@@ -19,17 +18,15 @@ public class VehicleServiceImpl implements VehicleService{
 	
 	@Autowired
 	private VehicleRepository vehicleRepo;
+	@Autowired
+    private ModelMapper modelMapper;
 	
 	@Override
 	public ServiceResponseDto<VehicleDto> createVehicle(VehicleDto vehicleDto) {
 		ServiceResponseDto<VehicleDto> responseDto = new ServiceResponseDto<VehicleDto>();
-		Vehicle vehicleDomain = new Vehicle()
-				.setModel(vehicleDto.getModel())
-				.setMake(vehicleDto.getMake())
-				.setColor(vehicleDto.getColor())
-				.setVin(vehicleDto.getVin())
-				.setYear(vehicleDto.getYear());
+		Vehicle vehicleDomain = modelMapper.map(vehicleDto, Vehicle.class);
 		vehicleDomain = vehicleRepo.save(vehicleDomain);
+		
 		vehicleDto.setId(vehicleDomain.getId());
 		responseDto.setStatus(Constants.StatusCodes.SUCCESS);
 		return responseDto;
@@ -43,13 +40,7 @@ public class VehicleServiceImpl implements VehicleService{
 		Optional<Vehicle> vehicleOptional = vehicleRepo.findById(vehicleDto.getId());
 		vehicleOptional.ifPresent( vehicle -> {
 			
-			Vehicle vehicleDomain = new Vehicle()
-					.setColor(vehicleDto.getColor())
-					.setId(vehicleDto.getId())
-					.setMake(vehicleDto.getMake())
-					.setModel(vehicleDto.getModel())
-					.setVin(vehicleDto.getVin())
-					.setYear(vehicleDto.getYear());
+			Vehicle vehicleDomain = modelMapper.map(vehicleDto, Vehicle.class);
 			vehicleRepo.save(vehicleDomain);
 			
 			responseDto.setStatus(Constants.StatusCodes.SUCCESS);
@@ -66,12 +57,7 @@ public class VehicleServiceImpl implements VehicleService{
 		responseDto.setStatus(Constants.StatusCodes.NOT_FOUND);
 		if (vehicleOptional.isPresent()) {
 			Vehicle v = vehicleOptional.get();
-			dto = new VehicleDto().setColor(v.getColor())
-					.setId(v.getId())
-					.setMake(v.getMake())
-					.setModel(v.getModel())
-					.setVin(v.getVin())
-					.setYear(v.getYear());
+			dto = modelMapper.map(v, VehicleDto.class);
 			responseDto.setResponseObject(dto);
 			responseDto.setStatus(Constants.StatusCodes.SUCCESS);
 		}
@@ -85,12 +71,7 @@ public class VehicleServiceImpl implements VehicleService{
 		List<Vehicle> vehicleList = vehicleRepo.findAll(PageRequest.of(0, 1000)).getContent();
 		
 		List<VehicleDto> vehicleDtoList = vehicleList.parallelStream().map( (vehicle) -> {
-			return new VehicleDto().setColor(vehicle.getColor())
-					.setId(vehicle.getId())
-					.setMake(vehicle.getMake())
-					.setModel(vehicle.getModel())
-					.setVin(vehicle.getVin())
-					.setYear(vehicle.getYear());
+			return modelMapper.map(vehicle, VehicleDto.class);
 		}).collect(Collectors.toList());
 		
 		responseDto.setResponseObject(vehicleDtoList);

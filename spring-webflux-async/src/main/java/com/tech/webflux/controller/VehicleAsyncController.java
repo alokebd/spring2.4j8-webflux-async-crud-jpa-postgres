@@ -1,5 +1,6 @@
 package com.tech.webflux.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,12 +30,14 @@ public class VehicleAsyncController {
 
 	@Autowired
 	private VehicleAsyncService vehicleAsyncService;
-
+	
+	@Autowired
+    private ModelMapper modelMapper;
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Mono<VehicleDto> createVehicleAsync(@RequestBody VehicleRequest req) {
-		VehicleDto vehicleDto = new VehicleDto().setColor(req.getColor()).setMake(req.getMake())
-				.setModel(req.getModel()).setVin(req.getVin()).setYear(req.getYear());
+		VehicleDto vehicleDto = modelMapper.map(req, VehicleDto.class);
 		return vehicleAsyncService.createVehicleAsync(vehicleDto)
 				.onErrorResume(e -> Mono.error(new BadRequestException(ApplicationProperties.ERROR_BAD_REQUEST)));
 	}
@@ -70,14 +73,13 @@ public class VehicleAsyncController {
 	 * type for a single value that may be available immediately or at some point in
 	 * the future.
 	 * 
-	 * @param id - vihicle ID
+	 * @param id - vehicle ID
 	 * @return - Mono
 	 */
 	@PutMapping
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public Mono<Void> updateVehicle(@RequestBody VehicleRequest req) {
-		VehicleDto vehicleDto = new VehicleDto().setColor(req.getColor()).setMake(req.getMake())
-				.setModel(req.getModel()).setVin(req.getVin()).setYear(req.getYear()).setId(req.getId());
+		VehicleDto vehicleDto = modelMapper.map(req, VehicleDto.class);
 		return vehicleAsyncService.updateVehicleAsync(vehicleDto)
 				.onErrorResume(e -> Mono.error(new BadRequestException(ApplicationProperties.ERROR_BAD_REQUEST)));
 	}
