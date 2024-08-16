@@ -52,10 +52,8 @@ public class VehicleController {
                 case SUCCESS:
                     return new ResponseEntity<>(vehicleDto, HttpStatus.CREATED);
                 case BAD_REQUEST:
-                    //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 	throw new BadRequestException(ApplicationProperties.ERROR_BAD_REQUEST);
                 default:
-                    //return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 	throw new InternalServerError(ApplicationProperties._500_ERROR);
             }
         } catch (Exception e) {
@@ -73,7 +71,7 @@ public class VehicleController {
 	            return new ResponseEntity<VehicleDto>(response.getResponseObject(), HttpStatus.OK);
 	        case NOT_FOUND:
 	            //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	        	throw new VehicleNotFoundException(ApplicationProperties.ERROR_Vehicle_NOT_FOUND+ id);
+	        	throw new VehicleNotFoundException(ApplicationProperties.ERROR_VECHICLE_NOT_FOUND+ id);
 	        default:
 	           // return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	            throw new InternalServerError(ApplicationProperties._500_ERROR);
@@ -87,10 +85,8 @@ public class VehicleController {
 	        case SUCCESS:
 	            return new ResponseEntity<List<VehicleDto>>(response.getResponseObject(), HttpStatus.OK);
 	        case NOT_FOUND:
-	            //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	        	throw new VehicleNotFoundException(ApplicationProperties.ERROR_Vehicle_NOT_FOUND);
+	        	throw new VehicleNotFoundException(ApplicationProperties.VECHICLE_NOT_FOUND);
 	        default:
-	          //  return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	        	 throw new InternalServerError(ApplicationProperties._500_ERROR);
     	}
     }
@@ -111,10 +107,8 @@ public class VehicleController {
                 case SUCCESS:
                     return new ResponseEntity<>(HttpStatus.ACCEPTED);
                 case BAD_REQUEST:
-                    //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 	throw new BadRequestException(ApplicationProperties.ERROR_BAD_REQUEST);
                 default:
-                   // return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 	 throw new InternalServerError(ApplicationProperties._500_ERROR);
             }
         } catch (Exception e) {
@@ -131,10 +125,8 @@ public class VehicleController {
 	        case SUCCESS:
 	            return new ResponseEntity<VehicleDto>(HttpStatus.ACCEPTED);
 	        case NOT_FOUND:
-	            //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	        	throw new VehicleNotFoundException(ApplicationProperties.ERROR_Vehicle_NOT_FOUND+id);
+	        	throw new VehicleNotFoundException(ApplicationProperties.ERROR_VECHICLE_NOT_FOUND+id);
 	        default:
-	            //return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	        	 throw new InternalServerError(ApplicationProperties._500_ERROR);
     	}
     }

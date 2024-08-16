@@ -16,36 +16,41 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(VehicleNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleVehicleNotFoundException(VehicleNotFoundException exception) {
+		log.error(HttpStatus.NOT_FOUND +" : "+exception.getMessage());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
+    }
+	
+	@ExceptionHandler(WebFluxCommonException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handleWebFluxCutomeException(WebFluxCommonException exception) {
+		log.error(HttpStatus.NOT_FOUND +" : "+ exception.getMessage());
+		
+        Mono<ErrorResponse> errResponse = Mono.just(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
+        //return errResponse;
+        log.error(errResponse.log().toString());
 		log.error(HttpStatus.NOT_FOUND + exception.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
 				.body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
     }
 	
-	@ExceptionHandler(WebFluxCutomeException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Mono<ErrorResponse> handleWebFluxCutomeException(WebFluxCutomeException exception) {
-		log.error(HttpStatus.NOT_FOUND + exception.getMessage());
-        Mono<ErrorResponse> errResponse = Mono.just(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
-        return errResponse;
-    }
-	
 	@ExceptionHandler(value = BadRequestException.class)
 	public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
-		log.error(HttpStatus.NOT_FOUND + ex.getMessage());
+		log.error(HttpStatus.BAD_REQUEST +" : "+ ex.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
 	}
 	
 	@ExceptionHandler(value = InternalServerError.class)
 	public ResponseEntity<ErrorResponse> handleInternalServerError(InternalServerError ex) {
-		log.error(HttpStatus.NOT_FOUND + ex.getMessage());
+		log.error(HttpStatus.INTERNAL_SERVER_ERROR +" : "+ex.getMessage());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.body(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage()));
 	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleCommonException(Exception ex) {
-		log.error(HttpStatus.NOT_FOUND + ex.getMessage());
+		log.error("CommonException : "+ex.getMessage());
 		if (ex instanceof NullPointerException) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

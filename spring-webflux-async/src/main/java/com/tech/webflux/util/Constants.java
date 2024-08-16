@@ -1,5 +1,7 @@
 package com.tech.webflux.util;
 
+import com.tech.webflux.exception.WebFluxCommonException;
+
 public class Constants {
 
     public static enum StatusCodes {
@@ -28,4 +30,10 @@ public class Constants {
         }
     }
 
+    
+    public static void fluxRuntimeException(boolean flag) {
+        if (flag) {
+            throw new WebFluxCommonException(ApplicationProperties.COMMON_ERRMOR);
+        }
+    }
 }
