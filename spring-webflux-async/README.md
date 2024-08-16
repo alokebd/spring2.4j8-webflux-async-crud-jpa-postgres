@@ -18,13 +18,13 @@
 - The application needs postgres to run. There is just one table for which the create SQL query is mentioned in 
 `src/main/resources/data.sql`. 
 - About PostGresSQL: You might use pgAdmin UI tool to connect to PostgreSQL (DB). And just connect to pgAdmin UI add foloowing SQL:
-```CREATE TABLE VEHICLE (
+``CREATE TABLE VEHICLE (
   id SERIAL PRIMARY KEY,
   model VARCHAR(250) NOT NULL,
   make VARCHAR(250) NOT NULL,
   vin VARCHAR(250) NOT NULL,
   color VARCHAR(250) NOT NULL,
-  year  VARCHAR(250) NOT NULL);```
+  year  VARCHAR(250) NOT NULL);``
   
 - Compile the application with `mvn clean install`
 
