@@ -11,20 +11,20 @@
 - Application Framework: Spring Boot (2.4.4)
 - Language: Java (8)
 - Packaging: Jar
-- Dependencies (Spring Web, Lombok, Spring Data JPA, Spring Devtools, Spring Test, junit, Springfox(Swagger2), WebFlux), PostGreSQL.
+- Dependencies (Spring Web, Lombok, Spring Data JPA, Spring Devtools, Spring Test, junit, Springfox(Swagger2), WebFlux, PostGreSQL.
 - Change application.properties for DB connection attributes (db name, user and password) when required.
 
 ## Local setup
 - The application needs postgres to run. There is just one table for which the create SQL query is mentioned in 
 `src/main/resources/data.sql`. 
-- About PostGresSQL: You might use pgAdmin UI tool to connect to your PostgreSQL (DB). And just connect to pgAdmin UI add foloowing SQL:
-`CREATE TABLE VEHICLE (
+- About PostGresSQL: You might use pgAdmin UI tool to connect to PostgreSQL (DB). And just connect to pgAdmin UI add foloowing SQL:
+```CREATE TABLE VEHICLE (
   id SERIAL PRIMARY KEY,
   model VARCHAR(250) NOT NULL,
   make VARCHAR(250) NOT NULL,
   vin VARCHAR(250) NOT NULL,
   color VARCHAR(250) NOT NULL,
-  year  VARCHAR(250) NOT NULL);`
+  year  VARCHAR(250) NOT NULL);```
   
 - Compile the application with `mvn clean install`
 
@@ -34,3 +34,10 @@
 - The application has swagger 2 integrated. Access the swagger at
 
 [Swagger Local URL](http://localhost:8089/swagger-ui.html)
+
+## APIs 
+- The asynchronous CRDD APIs: `v1/vehicle-async`
+- The synchronous CRDD APIs: `v1/vehicle`
+
+## Postman Collection
+- Postman collection added for testing.
