@@ -36,8 +36,8 @@
 [Swagger Local URL](http://localhost:8089/swagger-ui.html)
 
 ## APIs 
-- The asynchronous CRDD APIs: `v1/vehicle-async`
-- The synchronous CRDD APIs: `v1/vehicle`
+- The asynchronous CRUD APIs: `v1/vehicle-async`
+- The synchronous CRUD APIs: `v1/vehicle`
 
 ## Postman Collection
 - Postman collection added for testing `spring-webflux-async/Spring Webflux-Async Communicaiton.postman_collection.json`
